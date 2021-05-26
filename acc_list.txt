@@ -1,11 +1,25 @@
-acc0:pass0
-PUB : 
-0xd9be40e80dc4e06b9f014df1b5274e9befcf950d
+TOday
+0xab89808f59bc3283bb39022bfd7034367e63f7c7
+trans hash
+0x41f505b982b70fda6a3887e3bf34c1c47592a1ebe67273cc34f06a894c20f47c
 
-acc1:usera
-PUB : 
-0x772d37c54322cb3a9e9e002836c4fd9846ba684a
+acc0
+public key
+0x19b4b348982660a48f0e434161095f5ddb0fa0b9
+pass : pass0
+private key
+0x86af395baa97c0e84e5ca92a05156993f8f64ec3707c261243b457a5e8429ad1
 
-acc2:userb
-PUB : 
-0x613a3ac2e6acd2922b5e25606db8e83455bbe38b
+user A
+public key
+0xc8e367d0ca40939dd5b25cd39005b4d1345ce8a2
+pass : usera
+private key
+0x00423069b2aa026bbe4fd80a70ee502805fbaacc7d346594ed4947f26af1944f
+
+user B
+public key
+0xeec0477ebf34e8cf4b53ef129cbf8939e7c40dd0
+pass : userb
+private key
+0xf61a7b7118fd53d84effc21f443039a21f536a672d40c3c115ba8e6982b04014

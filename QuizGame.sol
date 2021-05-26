@@ -17,6 +17,10 @@ contract QuizCoin {
 }
 
 contract QuizGame {
+    struct Attendee {
+        
+    }
+
     QuizCoin public prizeContract;
     
     address public creator;
@@ -87,5 +91,9 @@ contract QuizGame {
         assembly {
             result := mload(add(source, 32))
         }
+    }
+
+    function checkAttendee() {
+
     }
 }

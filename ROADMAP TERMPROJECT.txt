@@ -1,0 +1,8 @@
+Owner tempat di fungsi deployer
+
+Nomer HP di fungsi guesser
+
+Pas di transactionID deploy harusnya punya list guesser
+
+jadi search nomer HP visitor lewat transactionID deploy
+ubah quizCoin jadi AttendeeSheet
