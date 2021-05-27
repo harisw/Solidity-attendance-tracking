@@ -1,9 +1,187 @@
-var contractByteCode = '0x608060405261d2f060035534801561001657600080fd5b5033600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550426002819055506000600460006101000a81548160ff021916908315150217905550600354426100889190610093565b600581905550610122565b600061009e826100e9565b91506100a9836100e9565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff038211156100de576100dd6100f3565b5b828201905092915050565b6000819050919050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6106bf806101316000396000f3fe608060405234801561001057600080fd5b50600436106100935760003560e01c8063959c067211610066578063959c067214610137578063c2b6b58c14610153578063e1583c5f14610171578063ec8cb2811461018f578063fcf589d1146101ad57610093565b80630ba370241461009857806342b71a36146100b65780637138a0eb146100e85780638da5cb5b14610119575b600080fd5b6100a06101cb565b6040516100ad91906105ee565b60405180910390f35b6100d060048036038101906100cb91906104f3565b6101d7565b6040516100df93929190610573565b60405180910390f35b61010260048036038101906100fd91906104f3565b610231565b6040516101109291906105c5565b60405180910390f35b6101216102d5565b60405161012e9190610558565b60405180910390f35b610151600480360381019061014c91906104ca565b6102fb565b005b61015b61047b565b60405161016891906105aa565b60405180910390f35b61017961048e565b60405161018691906105ee565b60405180910390f35b610197610494565b6040516101a491906105ee565b60405180910390f35b6101b561049a565b6040516101c291906105ee565b60405180910390f35b60008080549050905090565b600081815481106101e757600080fd5b90600052602060002090600302016000915090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16908060010154908060020154905083565b6000806000838154811061026e577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b906000526020600020906003020160010154600084815481106102ba577f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b90600052602060002090600302016002015491509150915091565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600460009054906101000a900460ff161561031557600080fd5b600554421061032357600080fd5b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561037e57600080fd5b600060405180606001604052803373ffffffffffffffffffffffffffffffffffffffff168152602001838152602001428152509050600081908060018154018082558091505060019003906000526020600020906003020160009091909190915060008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550602082015181600101556040820151816002015550507feabc6e27074ab200e5762af2e48c852e06032bbab02753242a8e9bce0eaab02d33834260405161046f93929190610573565b60405180910390a15050565b600460009054906101000a900460ff1681565b60035481565b60025481565b60055481565b6000813590506104af8161065b565b92915050565b6000813590506104c481610672565b92915050565b6000602082840312156104dc57600080fd5b60006104ea848285016104a0565b91505092915050565b60006020828403121561050557600080fd5b6000610513848285016104b5565b91505092915050565b61052581610609565b82525050565b6105348161061b565b82525050565b61054381610627565b82525050565b61055281610651565b82525050565b600060208201905061056d600083018461051c565b92915050565b6000606082019050610588600083018661051c565b610595602083018561053a565b6105a26040830184610549565b949350505050565b60006020820190506105bf600083018461052b565b92915050565b60006040820190506105da600083018561053a565b6105e76020830184610549565b9392505050565b60006020820190506106036000830184610549565b92915050565b600061061482610631565b9050919050565b60008115159050919050565b6000819050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b61066481610627565b811461066f57600080fd5b50565b61067b81610651565b811461068657600080fd5b5056fea264697066735822122006bb06d37d47681337e5691cc84bc98e15f4f2f5207d28ea749124cd54fe653c64736f6c63430008010033';
-var contractABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"bytes32","name":"phone","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"visitTime","type":"uint256"}],"name":"AppendVisit","type":"event"},{"inputs":[],"name":"OPEN_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"closedTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getVisitors","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isClosed","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"openDate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"_phone","type":"bytes32"}],"name":"visit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"visitorCount","outputs":[{"internalType":"uint256","name":"count","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"visitors","outputs":[{"internalType":"address","name":"visitWallet","type":"address"},{"internalType":"bytes32","name":"phone","type":"bytes32"},{"internalType":"uint256","name":"visitTime","type":"uint256"}],"stateMutability":"view","type":"function"}];
+var contractByteCode = "0x608060405261d2f060035534801561001657600080fd5b5033600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550426002819055506000600460006101000a81548160ff0219169083151502179055506003544201600581905550610a87806100946000396000f3fe608060405234801561001057600080fd5b50600436106100935760003560e01c8063bb867d2c11610066578063bb867d2c14610137578063c2b6b58c14610153578063e1583c5f14610171578063ec8cb2811461018f578063fcf589d1146101ad57610093565b80630ba370241461009857806342b71a36146100b65780637138a0eb146100e85780638da5cb5b14610119575b600080fd5b6100a06101cb565b6040516100ad91906108ce565b60405180910390f35b6100d060048036036100cb9190810190610715565b6101d7565b6040516100df93929190610845565b60405180910390f35b61010260048036036100fd9190810190610715565b6102c6565b60405161011092919061089e565b60405180910390f35b6101216103ab565b60405161012e91906107ec565b60405180910390f35b610151600480360361014c91908101906106d4565b6103d1565b005b61015b61056a565b6040516101689190610883565b60405180910390f35b61017961057d565b60405161018691906108ce565b60405180910390f35b610197610583565b6040516101a491906108ce565b60405180910390f35b6101b5610589565b6040516101c291906108ce565b60405180910390f35b60008080549050905090565b600081815481106101e457fe5b90600052602060002090600302016000915090508060000160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690806001018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102b65780601f1061028b576101008083540402835291602001916102b6565b820191906000526020600020905b81548152906001019060200180831161029957829003601f168201915b5050505050908060020154905083565b606060008083815481106102d657fe5b9060005260206000209060030201600101600084815481106102f457fe5b906000526020600020906003020160020154818054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561039b5780601f106103705761010080835404028352916020019161039b565b820191906000526020600020905b81548152906001019060200180831161037e57829003601f168201915b5050505050915091509150915091565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600460009054906101000a900460ff16156103eb57600080fd5b60055442106103f957600080fd5b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561045457600080fd5b61045c61058f565b60405180606001604052803373ffffffffffffffffffffffffffffffffffffffff168152602001838152602001428152509050600081908060018154018082558091505060019003906000526020600020906003020160009091909190915060008201518160000160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550602082015181600101908051906020019061051e9291906105c6565b506040820151816002015550507fd6958f12f094438aa5b509ba332385d19cfa26ee8f4c148cbf0bf0e98418b10b33834260405161055e93929190610807565b60405180910390a15050565b600460009054906101000a900460ff1681565b60035481565b60025481565b60055481565b6040518060600160405280600073ffffffffffffffffffffffffffffffffffffffff16815260200160608152602001600081525090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061060757805160ff1916838001178555610635565b82800160010185558215610635579182015b82811115610634578251825591602001919060010190610619565b5b5090506106429190610646565b5090565b61066891905b8082111561066457600081600090555060010161064c565b5090565b90565b600082601f83011261067c57600080fd5b813561068f61068a82610916565b6108e9565b915080825260208301602083018583830111156106ab57600080fd5b6106b68382846109e7565b50505092915050565b6000813590506106ce81610a3a565b92915050565b6000602082840312156106e657600080fd5b600082013567ffffffffffffffff81111561070057600080fd5b61070c8482850161066b565b91505092915050565b60006020828403121561072757600080fd5b6000610735848285016106bf565b91505092915050565b610747816109b1565b82525050565b61075681610969565b82525050565b6107658161097b565b82525050565b60006107768261094d565b6107808185610958565b93506107908185602086016109f6565b61079981610a29565b840191505092915050565b60006107af82610942565b6107b98185610958565b93506107c98185602086016109f6565b6107d281610a29565b840191505092915050565b6107e6816109a7565b82525050565b6000602082019050610801600083018461074d565b92915050565b600060608201905061081c600083018661073e565b818103602083015261082e818561076b565b905061083d60408301846107dd565b949350505050565b600060608201905061085a600083018661074d565b818103602083015261086c81856107a4565b905061087b60408301846107dd565b949350505050565b6000602082019050610898600083018461075c565b92915050565b600060408201905081810360008301526108b8818561076b565b90506108c760208301846107dd565b9392505050565b60006020820190506108e360008301846107dd565b92915050565b6000604051905081810181811067ffffffffffffffff8211171561090c57600080fd5b8060405250919050565b600067ffffffffffffffff82111561092d57600080fd5b601f19601f8301169050602081019050919050565b600081519050919050565b600081519050919050565b600082825260208201905092915050565b600061097482610987565b9050919050565b60008115159050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b60006109bc826109c3565b9050919050565b60006109ce826109d5565b9050919050565b60006109e082610987565b9050919050565b82818337600083830152505050565b60005b83811015610a145780820151818401526020810190506109f9565b83811115610a23576000848401525b50505050565b6000601f19601f8301169050919050565b610a43816109a7565b8114610a4e57600080fd5b5056fea2646970667358221220d6603b962744f87c8cdc27491380a75a7ef0937ae75388736a6bea573084376d64736f6c63430006010033";
+var contractABI = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "phone",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "visitTime",
+				"type": "uint256"
+			}
+		],
+		"name": "AppendVisit",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "OPEN_DURATION",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "closedTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "getVisitors",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "isClosed",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "openDate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_phone",
+				"type": "string"
+			}
+		],
+		"name": "visit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "visitorCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "visitors",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "visitWallet",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "phone",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "visitTime",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+// const Tx = require('ethereumjs-tx').Transaction
 
-function getAJAXObject() { // 3. AJAX ��ü�� �����ϴ� �Լ� ����
+
+console.log(web3.version.api)
+function getAJAXObject() {
     var request;
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
@@ -44,29 +222,24 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 	    if (request.readyState == 4) {
 	        if (request.status == 200) {
 	            if(request.responseText != "An error occured") {
-					// var coinContract = web3.eth.contract(coinContractABI);
-					// var coinContractData = coinContract.new.getData( {data: coinContractByteCode});
-					
 					// second contract
-					var contract = web3.eth.contract(contractABI);
-					// var contractData = contract.new.getData(contractAddr1, answer, {data: contractByteCode});
+					var contract = new web3.eth.Contract(contractABI);
+					// var contractData = contract.new.getData( {data: contractByteCode});
 
-					web3.eth.getTransactionCount(fromAddress, function(error, nonce){
-						console.log("Error count")
-						var rawTx = {
-							from: fromAddress,
-							gasPrice: web3.toHex(web3.eth.gasPrice),
+					web3.eth.getTransactionCount(fromAddress, function(err, txCount){
+						var txData = {
 							gasLimit: 8000000,
-							nonce: web3.toHex(nonce),
-							data: getDateTime(),
-						};
+							gasPrice: web3.utils.toHex(web3.eth.getGasPrice()), // 10 Gwei
+							nonce: web3.utils.toHex(txCount),
+							from: fromAddress,
+							data: contractByteCode
+						}
+						var transaction = new EthJS.Tx(txData) // or 'rinkeby'
+						transaction.sign( EthJS.Util.toBuffer(privkey, "hex") );
 
-						var tx = new EthJS.Tx(rawTx);
-						tx.sign( EthJS.Util.toBuffer(privkey, "hex") );
-
-						web3.eth.sendRawTransaction("0x" + tx.serialize().toString("hex"), function(err, hash) {
-							if (!err) {
-								console.log("Error Send");
+						var serializedTx = transaction.serialize().toString('hex')
+						web3.eth.sendSignedTransaction('0x' + serializedTx, function(err, hash){
+							if(!err){
 								document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + ".<br>Transaction is mining...";
 
 								var timer = window.setInterval(function() {
@@ -80,11 +253,11 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 									})
 								}, 3000)
 							} else {
-								document.querySelector("#deploy #message").innerHTML = err;
+								console.log(err);
 							}
-						});
+						})
 					})
-					
+
 	            }
 	        }
 	    }
@@ -95,63 +268,27 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 document.getElementById("guess").addEventListener("submit", function (e) {
     e.preventDefault();
 
-	// ����ڰ� web�� �Է��� value���� ������
     var contractAddress = document.querySelector("#guess #contractAddress").value;
     var fromAddress = document.querySelector("#guess #fromAddress").value;
     var privkey = document.querySelector("#guess #privkey").value;
     var myPhone = document.getElementById('myPhone').value;
 	var visitTime = getDateTime();
+	web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
+	web3.eth.personal.unlockAccount("0x19b4B348982660A48f0e434161095F5DdB0fA0B9", "pass0", 0);
 
 	// from contract
-	var contract = web3.eth.contract(contractABI).at(contractAddress);
-	//var amount = contract.amount();
-
+	var contract = new web3.eth.Contract(contractABI, contractAddress);
+	
 	// call fallback
 	var txSuccess = false;
 	document.querySelector("#guess #message").innerHTML = "";
 	document.querySelector("#guess #message3").innerHTML = "";
 	document.querySelector("#guess #message2").innerHTML = "";
 	
-	var contractData = contract.visit.getData(myPhone);
+
+	contract.methods.visit(myPhone).send({from: fromAddress});
+	document.querySelector("#guess #message2").innerHTML = "Attendance Time : "+visitTime;
 	
-	var sendGuessTxTimer = window.setInterval(function() {
-		if (true) {
-			web3.eth.getTransactionCount(fromAddress, function (error, nonce) {
-				var rawTx = {
-					data: contractData, // guess() �Լ��� ���� ������
-					from: fromAddress,
-					gasPrice: web3.toHex(web3.eth.gasPrice),
-					gasLimit: 8000000,
-					nonce: web3.toHex(nonce),
-					// to: contractAddress,
-				};
-
-				privkey = EthJS.Util.toBuffer(privkey, "hex");
-
-				var tx = new EthJS.Tx(rawTx);
-				tx.sign(privkey);
-				
-				web3.eth.sendRawTransaction("0x" + tx.serialize().toString("hex"), function (err, hash) {
-					if (!err) {
-						
-						window.clearInterval(sendGuessTxTimer);
-						document.querySelector("#guess #message2").innerHTML = "Attendee visit is mining...";
-						var getGuessReptTimer = window.setInterval(function() {
-							web3.eth.getTransactionReceipt(hash, function(err, result) {								
-								if (result)	{
-									window.clearInterval(getGuessReptTimer);
-									document.querySelector("#guess #message2").innerHTML = "Attendance Time : "+visitTime+" Transaction Hash : " + hash;
-								}
-							})
-						}, 1000)
-					} else {
-						console.log("Error send")
-						document.querySelector("#guess #message2").innerHTML = "Visit Transaction " + err;
-					}
-				})
-			})
-		}
-	}, 1000)
 }, false)
 
 document.getElementById("showVisitor").addEventListener("submit", function (e) {
@@ -160,107 +297,20 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 	// ����ڰ� web�� �Է��� value���� ������
     var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
     var privkey = document.querySelector("#showVisitor #privkey").value;
-	web3.eth.defaultAccount = web3.eth.accounts[0]
-	web3.personal.unlockAccount(web3.eth.defaultAccount, privkey, 0);
+
 
 	// from contract
-	var contract = web3.eth.contract(contractABI).at(contractAddress);
-	//console.log(contract)
-
-	//var amount = contract.amount();
-
+	var contract = new web3.eth.Contract(contractABI, contractAddress);
+	
 	// call fallback
 	var txSuccess = false;
 	document.querySelector("#showVisitor #message").innerHTML = "";
 	document.querySelector("#showVisitor #message3").innerHTML = "";
 	document.querySelector("#showVisitor #message2").innerHTML = "";
+	console.log(contract)
+	contract.methods.visitorCount().call((err, res) => {
+		if(!err) console.log(res)
+		else console.log(err)
+	})
 
-
-	contract.getVisitors(1, function(error, result){
-		if(!error)
-		{
-			document.querySelector("#showVisitor #message").innerHTML = result;
-		   
-	 		console.log(web3.eth.getTransaction(result));
-			console.log(result.value);
-		}
-		else
-			console.error(error);
-		});
-
-	// contract.visitorCount(function(error, value){
-	// 	if(!error){
-	// 		console.log(value)
-			// for (var index = 0; index < 1; index++) {
-			// 	console.log(index)
-			// 	contract.getVisitors(index, function(error, result){
-			// 		if(!error)
-			// 		{
-			// 			document.querySelector("#showVisitor #message").innerHTML += result;
-			
-			// 			// $("#attendance").html('Attendance Incremented to '+result[3]+' for '+result[0]+' '+result[1]);
-					   
-						
-			// 			console.log(result);
-			// 		}
-			// 		else
-			// 			console.error(error);
-			// 		});
-				
-			// }
-	// 	} else {
-	// 		console.error(error);
-	// 	}
-	// })
-	// contract.getVisitors(function(error, result){
-	// 	if(!error)
-	// 	{
-	// 		document.querySelector("#showVisitor #message").innerHTML = result;
-
-	// 		// $("#attendance").html('Attendance Incremented to '+result[3]+' for '+result[0]+' '+result[1]);
-		   
-			
-	// 		console.log(result);
-	// 	}
-	// 	else
-	// 		console.error(error);
-	// 	});
-
-	// var sendGuessTxTimer = window.setInterval(function() {
-	// 	if (true) {
-	// 		web3.eth.getTransactionCount(fromAddress, function (error, nonce) {
-	// 			var rawTx = {
-	// 				data: "0x"+getDateTime(),
-	// 				from: fromAddress,
-	// 				gasPrice: web3.toHex(web3.eth.gasPrice),
-	// 				gasLimit: 8000000,
-	// 				nonce: web3.toHex(nonce),
-	// 			};
-
-	// 			privkey = EthJS.Util.toBuffer(privkey, "hex");
-
-	// 			var tx = new EthJS.Tx(rawTx);
-	// 			tx.sign(privkey);
-				
-	// 			web3.eth.sendRawTransaction("0x" + tx.serialize().toString("hex"), function (err, hash) {
-	// 				if (!err) {
-						
-	// 					window.clearInterval(sendGuessTxTimer);
-	// 					document.querySelector("#showVisitor #message2").innerHTML = "Attendee visit is mining...";
-	// 					var getGuessReptTimer = window.setInterval(function() {
-	// 						web3.eth.getTransactionReceipt(hash, function(err, result) {								
-	// 							if (result)	{
-	// 								window.clearInterval(getGuessReptTimer);
-	// 								document.querySelector("#showVisitor #message2").innerHTML = "Attendance Time : "+visitTime+" Transaction Hash : " + hash;
-	// 							}
-	// 						})
-	// 					}, 1000)
-	// 				} else {
-	// 					console.log("Error send")
-	// 					document.querySelector("#showVisitor #message2").innerHTML = "Visit Transaction " + err;
-	// 				}
-	// 			})
-	// 		})
-	// 	}
-	// }, 1000)
 }, false)

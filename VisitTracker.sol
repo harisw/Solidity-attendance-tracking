@@ -5,7 +5,7 @@ contract Place {
 
     struct Visitor {
         address visitWallet;
-        bytes32 phone;
+        string phone;
         uint256 visitTime;
     }
     Visitor[] public visitors;
@@ -14,7 +14,7 @@ contract Place {
     uint public OPEN_DURATION = 15 hours;
     bool public isClosed;
     uint public closedTime;
-    event AppendVisit(address sender, bytes32 phone, uint256 visitTime);
+    event AppendVisit(address sender, string phone, uint256 visitTime);
     constructor() public {
         owner = msg.sender;
         openDate = block.timestamp;
@@ -23,7 +23,7 @@ contract Place {
     }
     
 
-    function visit(bytes32 _phone) public {
+    function visit(string _phone) public {
         require(!isClosed);
         require(block.timestamp < closedTime);
         require(msg.sender != owner);
@@ -46,7 +46,7 @@ contract Place {
     function getVisitors(uint index) public view returns(bytes32, uint256) {
         return (visitors[index].phone, visitors[index].visitTime);
     }
-    function visitorCount() public view returns(uint count) {
+    function visitorCount() view public returns (uint) {
         return visitors.length;
     }
 }
