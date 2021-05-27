@@ -14,7 +14,7 @@ contract Place {
     uint public OPEN_DURATION = 15 hours;
     bool public isClosed;
     uint public closedTime;
-
+    event AppendVisit(address sender, bytes32 phone, uint256 visitTime);
     constructor() public {
         owner = msg.sender;
         openDate = block.timestamp;
@@ -28,34 +28,25 @@ contract Place {
         require(block.timestamp < closedTime);
         require(msg.sender != owner);
         
-        visitors.push(Visitor({
+        Visitor memory v = Visitor({
             visitWallet: msg.sender,
             phone: _phone,
             visitTime: block.timestamp
-        }));
+        });
+        visitors.push(v);
+        emit AppendVisit(msg.sender, _phone, block.timestamp);
+        // visitors.push(Visitor({
+        //     visitWallet: msg.sender,
+        //     phone: _phone,
+        //     visitTime: block.timestamp
+        // }));
         // commitments[msg.sender] = stringToBytes32(_commitment);
     }
-    
-    // function isGameFinish() public view returns (bool) {
-    //     if (now < guessDeadline) {
-    //         return false;
-    //     } else {
-    //         return true;
-    //     }
-    // }
 
-    function getVisitors() public view returns (Visitor[] memory){
-    
-        return visitors;
+    function getVisitors(uint index) public view returns(bytes32, uint256) {
+        return (visitors[index].phone, visitors[index].visitTime);
     }
-
-    // function getVisitors() public view returns (Visitor[] memory){
-    //     Visitor[] memory result = new Visitor[](visitors.length);
-    //     for (uint i = 0; i < visitors.length; i++) {
-    //         Visitor storage visitor = visitors[i];
-    //         result[i] = visitor;
-    //     }
-    //     return result;
-    // }
-    
+    function visitorCount() public view returns(uint count) {
+        return visitors.length;
+    }
 }
