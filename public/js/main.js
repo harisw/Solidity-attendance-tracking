@@ -274,7 +274,7 @@ document.getElementById("guess").addEventListener("submit", function (e) {
     var myPhone = document.getElementById('myPhone').value;
 	var visitTime = getDateTime();
 	web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
-	web3.eth.personal.unlockAccount("0x19b4B348982660A48f0e434161095F5DdB0fA0B9", "pass0", 0);
+	web3.eth.personal.unlockAccount("0xfe9816d0cd6aeb7983e8d3d94604561171a8251e", "pass0", 0);
 
 	// from contract
 	var contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -307,10 +307,30 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 	document.querySelector("#showVisitor #message").innerHTML = "";
 	document.querySelector("#showVisitor #message3").innerHTML = "";
 	document.querySelector("#showVisitor #message2").innerHTML = "";
-	console.log(contract)
+	// console.log(contract)
 	contract.methods.visitorCount().call((err, res) => {
-		if(!err) console.log(res)
-		else console.log(err)
+		if(!err){
+			console.log(res)
+			for (var index = 0; index < res; index++) {
+				console.log(index)
+				contract.methods.getVisitors(index).call().then(index, function(error, result){
+					if(!error)
+					{
+						console.log("in")
+						document.querySelector("#showVisitor #message").innerHTML += result;
+			
+						// $("#attendance").html('Attendance Incremented to '+result[3]+' for '+result[0]+' '+result[1]);
+					   
+						console.log(result);
+					}
+					else
+						console.error(error);
+					});
+				}
+		} 
+		else{
+			console.log(err)
+		} 
 	})
 
 }, false)
