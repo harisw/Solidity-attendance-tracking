@@ -36,89 +36,13 @@ d = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + 
 
 var contractAddr1;
 
-// 4. ��Ʈ��Ʈ ����
-document.getElementById("deploy").addEventListener("submit", function(e){
-	e.preventDefault();
-
-	var fromAddress = document.querySelector("#deploy #fromAddress").value;
-	var privkey = document.querySelector("#deploy #privkey").value;
-	var placeName = document.querySelector("#deploy #placeName").value;
-
-	var url = "/getURL?fromAddress=" + fromAddress + "&passwd=" + privkey;
-	var request = getAJAXObject();
-
-	request.open("GET", url);
-	
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4) {
-	        if (request.status == 200) {
-	            if(request.responseText != "An error occured") {
-					// second contract
-					var contract = new web3.eth.Contract(contractABI);
-					// var contractData = contract.new.getData(placeName, {data: contractByteCode});
-
-					web3.eth.getTransactionCount(fromAddress, function(err, txCount){
-						var txData = {
-							gasLimit: 8000000,
-							gasPrice: web3.utils.toHex(web3.eth.getGasPrice()), // 10 Gwei
-							nonce: web3.utils.toHex(txCount),
-							from: fromAddress,
-							data: contractByteCode
-						}
-						var transaction = new EthJS.Tx(txData) // or 'rinkeby'
-						transaction.sign( EthJS.Util.toBuffer(privkey, "hex") );
-
-						var serializedTx = transaction.serialize().toString('hex')
-						web3.eth.sendSignedTransaction('0x' + serializedTx, function(err, hash){
-							if(!err){
-								document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + ".<br>Transaction is mining...";
-
-								var timer = window.setInterval(function() {
-									console.log("Receipt mana?")
-									web3.eth.getTransactionReceipt(hash, function(err, result) {
-										if (result) {
-											console.log("Dapat receipt")
-											window.clearInterval(timer);
-											document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + "</br></br>QuizGame Contract address : </br>" + result.contractAddress;
-											var contract1 = new web3.eth.Contract(contractABI, result.contractAddress)
-											contract1.methods.setDetails(placeName).send({from: fromAddress});
-
-											$.ajax('/set_session', 
-											{
-												data: {
-													contract: result.contractAddress
-												},
-											    dataType: 'json', // type of response data
-											    timeout: 500,     // timeout milliseconds
-											    success: function (data,status,xhr) {   // success callback function
-											        console.log("nice")
-											    },
-											    error: function (jqXhr, textStatus, errorMessage) { // error callback 
-											        console.log(errorMessage)
-											    }
-											});
-										}
-									})	
-								}, 3000)
-							} else {
-								console.log(err);
-							}
-						})
-					})
-					
-	            }
-	        }
-	    }
-	};
-	request.send(null);
-}, false);
-
 document.getElementById("guess").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    var contractAddress = document.querySelector("#guess #contractAddress").value;
+	
+    // var contractAddress = document.querySelector("#guess #contractAddress").value;
     var fromAddress = document.querySelector("#guess #fromAddress").value;
-    var privkey = document.querySelector("#guess #privkey").value;
+    // var privkey = document.querySelector("#guess #privkey").value;
     var myPhone = document.getElementById('myPhone').value;
 	var myHome = document.getElementById('myHome').value;
 	var visitTime = getDateTime();
@@ -132,68 +56,30 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 			console.log(err)
 		}
 	});
-	// from contract
-	var contract = new web3.eth.Contract(contractABI, contractAddress);
-	
-	// call fallback
-	var txSuccess = false;
-	document.querySelector("#guess #message").innerHTML = "";
-	document.querySelector("#guess #message3").innerHTML = "";
-	document.querySelector("#guess #message2").innerHTML = "";
-	
 
-	contract.methods.visit(myPhone, myHome).send({from: fromAddress});
-	document.querySelector("#guess #message2").innerHTML = "Attendance Time : "+visitTime;
-	
-}, false)
+	$.ajax( 
+	{
+		url: '/get_session',
+	    contentType: 'application/json',
+	    timeout: 500,     // timeout milliseconds
+	    success: function (data,status,xhr) {   // success callback function
+	        console.log("nice")
+	        console.log(data)
+	        // from contract
+			var contract = new web3.eth.Contract(contractABI, data.contractAddress);
+			
+			// call fallback
+			var txSuccess = false;
+			document.querySelector("#guess #message").innerHTML = "";
+			document.querySelector("#guess #message3").innerHTML = "";
+			document.querySelector("#guess #message2").innerHTML = "";
+			
 
-document.getElementById("showVisitor").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-	// ����ڰ� web�� �Է��� value���� ������
-    var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
-    var privkey = document.querySelector("#showVisitor #privkey").value;
-
-
-	// from contract
-	var contract = new web3.eth.Contract(contractABI, contractAddress);
-	
-	// call fallback
-	var txSuccess = false;
-	document.querySelector("#showVisitor #message").innerHTML = "";
-	document.querySelector("#showVisitor #message3").innerHTML = "";
-	document.querySelector("#showVisitor #message2").innerHTML = "";
-	// console.log(contract)
-
-	contract.methods.getDetails().call().then(function(result){
-		if(result)
-		{
-			var row = `Open Time : ${unixtoDateTime(result[2])}  | Place Name : ${result[1]}  | Owner Account Address : ${result[0]}  <br/>`
-			document.querySelector("#showVisitor #message").innerHTML += row;
-			console.log(result);
-		}
+			contract.methods.visit(myPhone, myHome).send({from: fromAddress});
+			document.querySelector("#guess #message2").innerHTML = "Attendance Time : "+visitTime;
+	    },
+	    error: function (jqXhr, textStatus, errorMessage) { // error callback 
+	        console.log(errorMessage)
+	    }
 	});
-
-
-	contract.methods.visitorCount().call((err, res) => {
-		if(!err){
-			console.log(res);
-			for (var index = 0; index < res; index++) {
-				console.log(index);
-				contract.methods.getVisitors(index).call().then(function(result){
-					if(result)
-					{
-						var row = `Time : ${unixtoDateTime(result[2])}  | Phone : ${result[0]}  | Home : ${result[1]}  <br/>`
-						document.querySelector("#showVisitor #message").innerHTML += row;
-								   
-						console.log(result);
-					}
-					});
-				}
-		} 
-		else{
-			console.log(err);
-		} 
-	})
-
 }, false)

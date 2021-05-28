@@ -1,9 +1,16 @@
 var express = require("express");
+var session = require("express-session");
+var bodyParser = require("body-parser");
 var app = express();
+var request = require("request");
+var moment = require("moment");
 
+app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { maxAge: 600000 }}));
 app.set("view engine", "ejs");
 
 app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.listen(8080);
 
@@ -11,8 +18,12 @@ app.get("/", function(req, res) {
     res.sendFile(__dirname + "/public/html/index.html");
 })
 
-var request = require("request");
-var moment = require("moment");
+app.get("/contract", function(req, res) {
+    console.log("deploy")
+    res.sendFile(__dirname + "/public/html/deploy.html");
+})
+
+
 
 app.get("/matches", function(req, res) {
     request("https://api.crowdscores.com/v1/matches?api_key=716b641aec224878b4563c19a3b5fb45", function(error, response, body) {
@@ -53,3 +64,23 @@ app.get("/getURL", function(req, res) {
         }
     });
 })
+
+var sessionData
+app.post('/set_session',function(req,res){
+  sessionData = req.session;
+  sessionData.contractAddress = req.body.contract;
+  console.log(req.body)
+  console.log("set session")
+  console.log(sessionData)
+ 
+ // res.end('Saved session and salary : ' + sessionData.username);
+ res.json(sessionData)
+});
+
+app.get('/get_session',function(req,res){
+  console.log("get session")
+  console.log(sessionData)
+ 
+ // res.end('Saved session and salary : ' + sessionData.username);
+ res.json(sessionData)
+});

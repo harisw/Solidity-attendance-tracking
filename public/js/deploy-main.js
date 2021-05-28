@@ -71,7 +71,7 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 						var serializedTx = transaction.serialize().toString('hex')
 						web3.eth.sendSignedTransaction('0x' + serializedTx, function(err, hash){
 							if(!err){
-								document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + ".<br>Transaction is mining...";
+								document.querySelector("#deploy #message").innerHTML = "Attendance contract Transaction Hash : " + hash + ".<br>Transaction is mining...";
 
 								var timer = window.setInterval(function() {
 									console.log("Receipt mana?")
@@ -79,16 +79,17 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 										if (result) {
 											console.log("Dapat receipt")
 											window.clearInterval(timer);
-											document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + "</br></br>QuizGame Contract address : </br>" + result.contractAddress;
+											document.querySelector("#deploy #message").innerHTML = "Contract Transaction Hash : " + hash + "</br></br>Attendance Contract address : </br>" + result.contractAddress;
 											var contract1 = new web3.eth.Contract(contractABI, result.contractAddress)
 											contract1.methods.setDetails(placeName).send({from: fromAddress});
 
-											$.ajax('/set_session', 
-											{
-												data: {
+											$.ajax({
+												url: '/set_session',
+												data: JSON.stringify({
 													contract: result.contractAddress
-												},
-											    dataType: 'json', // type of response data
+												}),
+												type: 'POST',
+											    contentType: 'applicationjson', // type of response data
 											    timeout: 500,     // timeout milliseconds
 											    success: function (data,status,xhr) {   // success callback function
 											        console.log("nice")
@@ -112,88 +113,3 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 	};
 	request.send(null);
 }, false);
-
-document.getElementById("guess").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    var contractAddress = document.querySelector("#guess #contractAddress").value;
-    var fromAddress = document.querySelector("#guess #fromAddress").value;
-    var privkey = document.querySelector("#guess #privkey").value;
-    var myPhone = document.getElementById('myPhone').value;
-	var myHome = document.getElementById('myHome').value;
-	var visitTime = getDateTime();
-	// web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
-	web3.eth.getAccounts(function(err, result){
-		if(!err){
-			console.log(result[0])
-			web3.eth.personal.unlockAccount(result[0], "pass0", 0);
-		}
-		else{
-			console.log(err)
-		}
-	});
-	// from contract
-	var contract = new web3.eth.Contract(contractABI, contractAddress);
-	
-	// call fallback
-	var txSuccess = false;
-	document.querySelector("#guess #message").innerHTML = "";
-	document.querySelector("#guess #message3").innerHTML = "";
-	document.querySelector("#guess #message2").innerHTML = "";
-	
-
-	contract.methods.visit(myPhone, myHome).send({from: fromAddress});
-	document.querySelector("#guess #message2").innerHTML = "Attendance Time : "+visitTime;
-	
-}, false)
-
-document.getElementById("showVisitor").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-	// ����ڰ� web�� �Է��� value���� ������
-    var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
-    var privkey = document.querySelector("#showVisitor #privkey").value;
-
-
-	// from contract
-	var contract = new web3.eth.Contract(contractABI, contractAddress);
-	
-	// call fallback
-	var txSuccess = false;
-	document.querySelector("#showVisitor #message").innerHTML = "";
-	document.querySelector("#showVisitor #message3").innerHTML = "";
-	document.querySelector("#showVisitor #message2").innerHTML = "";
-	// console.log(contract)
-
-	contract.methods.getDetails().call().then(function(result){
-		if(result)
-		{
-			var row = `Open Time : ${unixtoDateTime(result[2])}  | Place Name : ${result[1]}  | Owner Account Address : ${result[0]}  <br/>`
-			document.querySelector("#showVisitor #message").innerHTML += row;
-			console.log(result);
-		}
-	});
-
-
-	contract.methods.visitorCount().call((err, res) => {
-		if(!err){
-			console.log(res);
-			for (var index = 0; index < res; index++) {
-				console.log(index);
-				contract.methods.getVisitors(index).call().then(function(result){
-					if(result)
-					{
-						var row = `Time : ${unixtoDateTime(result[2])}  | Phone : ${result[0]}  | Home : ${result[1]}  <br/>`
-						document.querySelector("#showVisitor #message").innerHTML += row;
-								   
-						console.log(result);
-					}
-					});
-				}
-		} 
-		else{
-			console.log(err);
-		} 
-	})
-
-}, false)
