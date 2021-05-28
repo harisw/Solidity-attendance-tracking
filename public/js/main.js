@@ -203,6 +203,14 @@ function getDateTime(){
 
     return d;
 }
+function unixtoDateTime(unix_timestamp){
+// Create a new JavaScript Date object based on the timestamp
+// multiplied by 1000 so that the argument is in milliseconds, not seconds.
+var d = new Date(unix_timestamp * 1000);
+d = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) + " " + ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2) + ":" + ('0' + d.getSeconds()).slice(-2);
+
+    return d;
+}
 
 var contractAddr1;
 
@@ -274,7 +282,7 @@ document.getElementById("guess").addEventListener("submit", function (e) {
     var myPhone = document.getElementById('myPhone').value;
 	var visitTime = getDateTime();
 	web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
-	web3.eth.personal.unlockAccount("0xfe9816d0cd6aeb7983e8d3d94604561171a8251e", "pass0", 0);
+	web3.eth.personal.unlockAccount("0x4bfde1a4fb1573292bf17a5d73a81d666f39f354", "pass0", 0);
 
 	// from contract
 	var contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -313,22 +321,15 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 			console.log(res);
 			for (var index = 0; index < res; index++) {
 				console.log(index);
-				contract.methods.getVisitors(index).call().then(function(error, result){
-					if(!error)
+				contract.methods.getVisitors(index).call().then(function(result){
+					if(result)
 					{
-						console.log("in")
-						document.querySelector("#showVisitor #message").innerHTML += result;
-			
-						// $("#attendance").html('Attendance Incremented to '+result[3]+' for '+result[0]+' '+result[1]);
-					   
+						var row = `Time : ${unixtoDateTime(result[1])}  | Phone : ${result[0]}  <br/>`
+						document.querySelector("#showVisitor #message").innerHTML += row;
+								   
 						console.log(result);
 					}
-					else{
-						console.error(error);	
-					}
-						
 					});
-				console.log("lewat")
 				}
 		} 
 		else{
