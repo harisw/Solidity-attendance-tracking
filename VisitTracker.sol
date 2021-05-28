@@ -9,20 +9,32 @@ contract Place {
         string home;
         uint256 visitTime;
     }
+
     Visitor[] public visitors;
     address public owner;
+    string public placeName;
     uint public openDate;
     uint public OPEN_DURATION = 15 hours;
     bool public isClosed;
     uint public closedTime;
+
     event AppendVisit(address sender, string phone, string nameHome, uint256 visitTime);
+
     constructor() public {
         owner = msg.sender;
+        placeName = 'Default Place';
         openDate = block.timestamp;
         isClosed = false;
         closedTime = block.timestamp + OPEN_DURATION;
     }
     
+    function setDetails(string memory _place) public{
+        placeName = _place;
+    }
+    
+    function getDetails() public view returns(address, string memory, uint256) {
+        return (owner, placeName, openDate);
+    }
 
     function visit(string memory _phone, string memory _home) public {
         require(!isClosed);
@@ -51,4 +63,5 @@ contract Place {
     function visitorCount() view public returns (uint) {
         return visitors.length;
     }
+
 }
