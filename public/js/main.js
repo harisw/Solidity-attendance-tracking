@@ -310,10 +310,10 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 	// console.log(contract)
 	contract.methods.visitorCount().call((err, res) => {
 		if(!err){
-			console.log(res)
+			console.log(res);
 			for (var index = 0; index < res; index++) {
-				console.log(index)
-				contract.methods.getVisitors(index).call().then(index, function(error, result){
+				console.log(index);
+				contract.methods.getVisitors(index).call().then(function(error, result){
 					if(!error)
 					{
 						console.log("in")
@@ -323,13 +323,16 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 					   
 						console.log(result);
 					}
-					else
-						console.error(error);
+					else{
+						console.error(error);	
+					}
+						
 					});
+				console.log("lewat")
 				}
 		} 
 		else{
-			console.log(err)
+			console.log(err);
 		} 
 	})
 
