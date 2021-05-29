@@ -51,6 +51,9 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 	var url = "/getURL?fromAddress=" + fromAddress + "&passwd=" + privkey;
 	var request = getAJAXObject();
 
+
+	web3.eth.personal.unlockAccount(fromAddress, "pass0", 0);
+
 	request.open("GET", url);
 	
 	request.onreadystatechange = function() {
@@ -75,7 +78,7 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 						var serializedTx = transaction.serialize().toString('hex')
 						web3.eth.sendSignedTransaction('0x' + serializedTx, function(err, hash){
 							if(!err){
-								document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + ".<br>Transaction is mining...";
+								document.querySelector("#deploy #message").innerHTML = "Transaction Hash : " + hash + ".<br>Transaction is mining...";
 
 								var timer = window.setInterval(function() {
 									console.log("Receipt mana?")
@@ -83,7 +86,7 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 										if (result) {
 											console.log("Dapat receipt")
 											window.clearInterval(timer);
-											document.querySelector("#deploy #message").innerHTML = "QuizGame Transaction Hash : " + hash + "</br></br>QuizGame Contract address : </br>" + result.contractAddress;
+											document.querySelector("#deploy #message").innerHTML = "Transaction Hash : " + hash + "</br></br>Contract address : </br>" + result.contractAddress;
 											var contract1 = new web3.eth.Contract(contractABI, result.contractAddress)
 											contract1.methods.setDetails(placeName).send({from: fromAddress});
 										}
@@ -112,6 +115,7 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 	var myHome = document.getElementById('myHome').value;
 	var visitTime = getDateTime();
 	// web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
+	
 	web3.eth.getAccounts(function(err, result){
 		if(!err){
 			console.log(result[0])
@@ -121,8 +125,11 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 			console.log(err)
 		}
 	});
+
+	
 	// from contract
 	var contract = new web3.eth.Contract(contractABI, contractAddress);
+
 	
 	// call fallback
 	var txSuccess = false;
@@ -130,9 +137,20 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 	document.querySelector("#guess #message3").innerHTML = "";
 	document.querySelector("#guess #message2").innerHTML = "";
 	
+	web3.eth.personal.unlockAccount(fromAddress, privkey, 100);
 
-	contract.methods.visit(myPhone, myHome).send({from: fromAddress});
-	document.querySelector("#guess #message2").innerHTML = "Attendance Time : "+visitTime;
+	contract.methods.visit(myPhone, myHome).send({from: fromAddress})
+	.on('transactionHash', function(hash){
+		document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
+	})
+	.on('receipt',function(receipt){
+		console.log(receipt)
+		document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
+		document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
+		document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
+	})
+	;
+	
 	
 }, false)
 
@@ -141,7 +159,7 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 
 	// ����ڰ� web�� �Է��� value���� ������
     var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
-    var privkey = document.querySelector("#showVisitor #privkey").value;
+    // var privkey = document.querySelector("#showVisitor #privkey").value;
 
 
 	// from contract
