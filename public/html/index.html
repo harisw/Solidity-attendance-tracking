@@ -26,7 +26,8 @@
                 </div>
             </div>
             <br>
-            <div class="col-md-4">
+            <div class="row">
+                            <div class="col-md-4">
                 <h3>Deploy Attendance sheet</h3>
                 <form id="deploy">
                     <div class="form-group">
@@ -36,6 +37,10 @@
                     <div class="form-group">
                         <label>Owner address: </label>
                         <input type="text" class="form-control" id="fromAddress" value="0x..." onfocus="this.value=''">
+                    </div>
+                    <div class="form-group">
+                        <label>Owner Password: </label>
+                        <input type="password" class="form-control" id="ownerPassword" onfocus="this.value=''">
                     </div>
                     <div class="form-group">
                         <label>Private key: </label>
@@ -59,7 +64,7 @@
                     </div>
                     <div class="form-group">
                         <label>Address password: </label>
-                        <input type="text" class="form-control" id="privkey" value="" onfocus="this.value=''">
+                        <input type="password" class="form-control" id="privkey" value="" onfocus="this.value=''">
                     </div>
                     <div class="form-group">
                         <label>Phone Number: </label></br>
@@ -97,6 +102,7 @@
                     <p id="message3" style="word-wrap: break-word; font-size:12px;"></p>
                     </br></br></br></br>
                 </form>
+            </div>
             </div>
         <script type="text/javascript" src="/js/web3.min.js"></script>
         <script type="text/javascript" src="/js/ethereumjs-tx.js"></script>

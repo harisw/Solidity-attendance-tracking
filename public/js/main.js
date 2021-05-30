@@ -2,7 +2,6 @@ var contractByteCode = "0x608060405261d2f06004553480156200001757600080fd5b503360
 var contractABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"string","name":"phone","type":"string"},{"indexed":false,"internalType":"string","name":"nameHome","type":"string"},{"indexed":false,"internalType":"uint256","name":"visitTime","type":"uint256"}],"name":"AppendVisit","type":"event"},{"inputs":[],"name":"OPEN_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"closedTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getDetails","outputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getVisitors","outputs":[{"internalType":"string","name":"","type":"string"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isClosed","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"openDate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"placeName","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_place","type":"string"}],"name":"setDetails","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_phone","type":"string"},{"internalType":"string","name":"_home","type":"string"}],"name":"visit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"visitorCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"visitors","outputs":[{"internalType":"address","name":"visitWallet","type":"address"},{"internalType":"string","name":"phone","type":"string"},{"internalType":"string","name":"home","type":"string"},{"internalType":"uint256","name":"visitTime","type":"uint256"}],"stateMutability":"view","type":"function"}];
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-// const Tx = require('ethereumjs-tx').Transaction
 
 
 
@@ -39,6 +38,7 @@ d = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + 
 }
 
 var contractAddr1;
+var accPass;
 
 // 4. ��Ʈ��Ʈ ����
 document.getElementById("deploy").addEventListener("submit", function(e){
@@ -47,12 +47,12 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 	var fromAddress = document.querySelector("#deploy #fromAddress").value;
 	var privkey = document.querySelector("#deploy #privkey").value;
 	var placeName = document.querySelector("#deploy #placeName").value;
-
+	accPass = document.querySelector("#deploy #ownerPassword").value;
 	var url = "/getURL?fromAddress=" + fromAddress + "&passwd=" + privkey;
 	var request = getAJAXObject();
 
 
-	web3.eth.personal.unlockAccount(fromAddress, "pass0", 0);
+	web3.eth.personal.unlockAccount(fromAddress, accPass, 1200);
 
 	request.open("GET", url);
 	
@@ -119,7 +119,7 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 	web3.eth.getAccounts(function(err, result){
 		if(!err){
 			console.log(result[0])
-			web3.eth.personal.unlockAccount(result[0], "pass0", 0);
+			web3.eth.personal.unlockAccount(result[0], "pass0", 1200);
 		}
 		else{
 			console.log(err)
@@ -157,7 +157,6 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 document.getElementById("showVisitor").addEventListener("submit", function (e) {
     e.preventDefault();
 
-	// ����ڰ� web�� �Է��� value���� ������
     var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
     // var privkey = document.querySelector("#showVisitor #privkey").value;
 

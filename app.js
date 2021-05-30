@@ -4,15 +4,18 @@ var app = express();
 app.set("view engine", "ejs");
 
 app.use(express.static("public"));
-
+var request = require("request");
+var moment = require("moment");
 app.listen(8080);
+
 
 app.get("/", function(req, res) {
     res.sendFile(__dirname + "/public/html/index.html");
 })
 
-var request = require("request");
-var moment = require("moment");
+app.get("/new", function(req, res) {
+    res.sendFile(__dirname + "/public/html/index-new.html");
+})
 
 app.get("/matches", function(req, res) {
     request("https://api.crowdscores.com/v1/matches?api_key=716b641aec224878b4563c19a3b5fb45", function(error, response, body) {
