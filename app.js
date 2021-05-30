@@ -1,12 +1,16 @@
 var express = require("express");
-var app = express();
-
-app.set("view engine", "ejs");
-
-app.use(express.static("public"));
+const app = express();
+const fs = require('fs');
+const bodyParser = require('body-parser');
 var request = require("request");
 var moment = require("moment");
-app.listen(8080);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+app.listen(8080, () => console.log(`Started server at http://localhost:8080!`));
 
 
 app.get("/", function(req, res) {
@@ -17,6 +21,44 @@ app.get("/new", function(req, res) {
     res.sendFile(__dirname + "/public/html/index-new.html");
 })
 
+app.get("/get_contracts", function(req, res) {
+    fs.readFile('./data/contracts.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(`Error reading file from disk: ${err}`);
+        } else {
+            // parse JSON string to JSON object
+            const databases = JSON.parse(data);
+            res.json(databases);
+        }
+    });
+});
+
+app.post("/save_contract", function(req, res) {
+    console.log(req.body.contractAddr)
+    var contractAddr = req.body.contractAddr;
+    fs.readFile('./data/contracts.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(`Error reading file from disk: ${err}`);
+        } else {
+            // parse JSON string to JSON object
+            const databases = JSON.parse(data);
+            // add a new record
+            databases.push({
+                contract: contractAddr
+            });
+
+            // write new data back to the file
+            fs.writeFileSync('./data/contracts.json', JSON.stringify(databases, null, 4), (err) => {
+                if (err) {
+                    console.log(`Error writing file: ${err}`);
+                } else {
+                    console.log("Success updating contracts");
+                }
+            });
+        }
+
+    });
+});
 app.get("/matches", function(req, res) {
     request("https://api.crowdscores.com/v1/matches?api_key=716b641aec224878b4563c19a3b5fb45", function(error, response, body) {
         if (!error && response.statusCode == 200) {

@@ -8,7 +8,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Covido</title>
+      <title>Attendance Tracker</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -85,10 +85,16 @@
       </div>
       <div class="modal-body">
         <form id="showVisitor">
-           <div class="form-group">
-               <label>Contract Address: </label>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Select Contract</label>
+            <select class="form-control" aria-label="Default select example" id="selectContract">
+              <option selected>Contract Address</option>
+            </select>
+          </div>
+<!--            <div class="form-group">
+               <label>Contract Address</label>
                <input type="text" class="form-control" id="contractAddress" value="" onfocus="this.value=''">
-           </div>
+           </div> -->
 
            <input type="submit" value="Show" class="btn btn-primary" />
            <h5 id="contractTitle"></h5>
@@ -97,8 +103,8 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Time</th>
-                <th scope="col">Home</th>
                 <th scope="col">Phone</th>
+                <th scope="col">Address</th>
               </tr>
             </thead>
             <tbody id="visitorsBody">
@@ -177,10 +183,11 @@
                      <form id="guess" class="main_form">
                      <div class="row">
                       <div class="col-md-12 ">
-                           <input class="contactus" placeholder="Visit contract Address" type="type" name="Name" id="contractAddress"> 
+                          <p id="contractAddress"></p>
+<!--                            <input class="contactus" placeholder="Visit contract Address" type="type" name="Name" id="contractAddress">  -->
                         </div>
                         <div class="col-md-12 ">
-                           <input class="contactus" placeholder="Visitor account Address" type="type" name="Name" id="fromAddress" onfocus="this.value=''"> 
+                           <input class="contactus" placeholder="Visitor account Address" type="type" name="Name" id="fromAddress" onfocus="this.value=''">
                         </div>
                         <div class="col-md-6">
                            <input class="contactus" placeholder="Visitor Password" type="password" name="Name" id="privkey" onfocus="this.value=''"> 

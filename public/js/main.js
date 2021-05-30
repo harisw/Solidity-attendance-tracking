@@ -25,6 +25,7 @@ function getDateTime(){
 
     return d;
 }
+
 function unixtoDateTime(unix_timestamp){
 // Create a new JavaScript Date object based on the timestamp
 // multiplied by 1000 so that the argument is in milliseconds, not seconds.
@@ -85,7 +86,14 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 											window.clearInterval(timer);
 											document.querySelector("#deploy #message").innerHTML = "Transaction Hash : " + hash + "</br></br>Contract address : </br>" + result.contractAddress;
 											var contract1 = new web3.eth.Contract(contractABI, result.contractAddress)
+											contractAddr1 = result.contractAddress;
+											$("#guess #contractAddress")[0].innerHTML = contractAddr1;
 											contract1.methods.setDetails(placeName).send({from: fromAddress});
+											$.post("/save_contract", {
+												contractAddr: contractAddr1
+											}, function(data, status){
+												console.log(status);
+											})
 										}
 									})	
 								}, 3000)
@@ -105,25 +113,13 @@ document.getElementById("deploy").addEventListener("submit", function(e){
 document.getElementById("guess").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    var contractAddress = document.querySelector("#guess #contractAddress").value;
+    var contractAddress = document.querySelector("#guess #contractAddress").innerHTML;
     var fromAddress = document.querySelector("#guess #fromAddress").value;
     var privkey = document.querySelector("#guess #privkey").value;
     var myPhone = document.getElementById('myPhone').value;
 	var myHome = document.getElementById('myHome').value;
 	var visitTime = getDateTime();
-	// web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
-	
-	web3.eth.getAccounts(function(err, result){
-		if(!err){
-			console.log(result[0])
-			web3.eth.personal.unlockAccount(result[0], "pass0", 1200);
-		}
-		else{
-			console.log(err)
-		}
-	});
 
-	
 	// from contract
 	var contract = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -133,7 +129,8 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 	document.querySelector("#guess #message").innerHTML = "";
 	document.querySelector("#guess #message3").innerHTML = "";
 	document.querySelector("#guess #message2").innerHTML = "";
-	
+	console.log(fromAddress)
+	console.log(privkey)
 	web3.eth.personal.unlockAccount(fromAddress, privkey, 100);
 
 	contract.methods.visit(myPhone, myHome).send({from: fromAddress}, (err, hash) => {
@@ -145,43 +142,17 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 					if(receipt){
 						console.log(receipt)
 						document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
-						document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
-						document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
+						document.querySelector("#guess #message2").innerHTML = "Gas Used : " + receipt.gasUsed;
+						document.querySelector("#guess #message3").innerHTML = "<br/>Attendance Time : "+visitTime;
 						window.clearInterval(timer)
 					}
 				});
 			}, 3000)
-			// contract.getTransactionReceipt(hash, (receipt) => {
-			// 	console.log(receipt)
-			// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
-			// 	document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
-			// 	document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;		
-			// });
 		} else{
 			console.log("Error getting receipt")
 			console.log(err)
 		}
 	});
-	// .on('transactionHash', function(hash){
-	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
-	// })
-	// .on('receipt',function(receipt){
-	// 	console.log(receipt)
-	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
-	// 	document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
-	// 	document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
-	// });
-
-	// contract.methods.visit(myPhone, myHome).send({from: fromAddress})
-	// .on('transactionHash', function(hash){
-	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
-	// })
-	// .on('receipt',function(receipt){
-	// 	console.log(receipt)
-	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
-	// 	document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
-	// 	document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
-	// });
 	
 	
 }, false)
@@ -189,9 +160,10 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 document.getElementById("showVisitor").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
+    // var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
     // var privkey = document.querySelector("#showVisitor #privkey").value;
-
+    var contractAddress = document.querySelector("#showVisitor #selectContract").value;
+    console.log(contractAddress)
 
 	// from contract
 	var contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -215,7 +187,7 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 	});
 
 	$("#visitorsBody")[0].innerHTML = "";
-
+	var counter = 1;
 	contract.methods.visitorCount().call((err, res) => {
 		if(!err){
 			console.log(res);
@@ -225,7 +197,7 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 					if(result)
 					{
 						var row = `<tr>
-									<td scope="row">${index}</td>
+									<td scope="row">${counter}</td>
 									<td>${unixtoDateTime(result[2])}</td>
 									<td>${result[0]}</td>
 									<td>${result[1]}</td>
@@ -234,6 +206,7 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 						// document.querySelector("#showVisitor #message").innerHTML += row;
 								   
 						console.log(result);
+						counter++;
 					}
 					});
 				}
@@ -244,3 +217,15 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 	})
 
 }, false)
+
+$('#visitorsModal').on('shown.bs.modal', function (e) {
+	$.get("/get_contracts", function(data, status){
+		console.log(data)
+		var current = "";
+		for(var i = 0; i < data.length; i++) {
+			if(current == data[i].contract) continue;
+			$("#selectContract").append(`<option value="${data[i].contract}"">${data[i].contract}</option>`);
+			current = data[i].contract;
+		}
+	})
+})

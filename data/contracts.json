@@ -1,1 +1,26 @@
-{"address":"contractAddr"}
+[
+    {
+        "contract": "0xcAF769b825058F8fC273a68f8a98112696D43197"
+    },
+    {
+        "contract": "0xcAF769b825058F8fC273a68f8a98112696D43197"
+    },
+    {
+        "contract": "0xcAF769b825058F8fC273a68f8a98112696D43197"
+    },
+    {
+        "contract": "0xcAF769b825058F8fC273a68f8a98112696D43197"
+    },
+    {
+        "contract": "0x7e5521B6769457109bda95BA4a33D1D69c8240B5"
+    },
+    {
+        "contract": "0x7e5521B6769457109bda95BA4a33D1D69c8240B5"
+    },
+    {
+        "contract": "0xeaEfE288a480669ad1f84Fc835FD4889bc35D8de"
+    },
+    {
+        "contract": "0x57cdB72eB1Cc23D82098A1C7c8649AB647c96Fba"
+    }
+]
