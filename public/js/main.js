@@ -139,17 +139,52 @@ document.getElementById("guess").addEventListener("submit", function (e) {
 	
 	web3.eth.personal.unlockAccount(fromAddress, privkey, 100);
 
-	contract.methods.visit(myPhone, myHome).send({from: fromAddress})
-	.on('transactionHash', function(hash){
-		document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
-	})
-	.on('receipt',function(receipt){
-		console.log(receipt)
-		document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
-		document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
-		document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
-	})
-	;
+	contract.methods.visit(myPhone, myHome).send({from: fromAddress}, (err, hash) => {
+		document.querySelector("#guess #message").innerHTML = "Transaction Hash : " + hash + "<br>Mining...";
+		if(!err){
+			var timer = window.setInterval(function() {
+				console.log("Waiting receipt")
+				web3.eth.getTransactionReceipt(hash, (err, receipt) => {
+					if(receipt){
+						console.log(receipt)
+						document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
+						document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
+						document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
+						window.clearInterval(timer)
+					}
+				});
+			}, 3000)
+			// contract.getTransactionReceipt(hash, (receipt) => {
+			// 	console.log(receipt)
+			// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
+			// 	document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
+			// 	document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;		
+			// });
+		} else{
+			console.log("Error getting receipt")
+			console.log(err)
+		}
+	});
+	// .on('transactionHash', function(hash){
+	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
+	// })
+	// .on('receipt',function(receipt){
+	// 	console.log(receipt)
+	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
+	// 	document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
+	// 	document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
+	// });
+
+	// contract.methods.visit(myPhone, myHome).send({from: fromAddress})
+	// .on('transactionHash', function(hash){
+	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
+	// })
+	// .on('receipt',function(receipt){
+	// 	console.log(receipt)
+	// 	document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
+	// 	document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
+	// 	document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
+	// });
 	
 	
 }, false)
