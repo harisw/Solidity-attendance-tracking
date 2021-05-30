@@ -3,6 +3,9 @@ var contractABI = [{"inputs":[],"stateMutability":"nonpayable","type":"construct
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
+
+
+console.log(web3.version.api)
 function getAJAXObject() {
     var request;
     if (window.XMLHttpRequest) {
@@ -35,3 +38,168 @@ d = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + 
 }
 
 var contractAddr1;
+var accPass;
+
+// 4. ��Ʈ��Ʈ ����
+document.getElementById("deploy").addEventListener("submit", function(e){
+	e.preventDefault();
+
+	var fromAddress = document.querySelector("#deploy #fromAddress").value;
+	var privkey = document.querySelector("#deploy #privkey").value;
+	var placeName = document.querySelector("#deploy #placeName").value;
+	accPass = document.querySelector("#deploy #ownerPassword").value;
+	var url = "/getURL?fromAddress=" + fromAddress + "&passwd=" + privkey;
+	var request = getAJAXObject();
+
+
+	web3.eth.personal.unlockAccount(fromAddress, accPass, 1200);
+
+	request.open("GET", url);
+	
+	request.onreadystatechange = function() {
+	    if (request.readyState == 4) {
+	        if (request.status == 200) {
+	            if(request.responseText != "An error occured") {
+					// second contract
+					var contract = new web3.eth.Contract(contractABI);
+					// var contractData = contract.new.getData(placeName, {data: contractByteCode});
+
+					web3.eth.getTransactionCount(fromAddress, function(err, txCount){
+						var txData = {
+							gasLimit: 8000000,
+							gasPrice: web3.utils.toHex(web3.eth.getGasPrice()), // 10 Gwei
+							nonce: web3.utils.toHex(txCount),
+							from: fromAddress,
+							data: contractByteCode
+						}
+						var transaction = new EthJS.Tx(txData) // or 'rinkeby'
+						transaction.sign( EthJS.Util.toBuffer(privkey, "hex") );
+
+						var serializedTx = transaction.serialize().toString('hex')
+						web3.eth.sendSignedTransaction('0x' + serializedTx, function(err, hash){
+							if(!err){
+								document.querySelector("#deploy #message").innerHTML = "Transaction Hash : " + hash + ".<br>Transaction is mining...";
+
+								var timer = window.setInterval(function() {
+									console.log("Receipt mana?")
+									web3.eth.getTransactionReceipt(hash, function(err, result) {
+										if (result) {
+											console.log("Dapat receipt")
+											window.clearInterval(timer);
+											document.querySelector("#deploy #message").innerHTML = "Transaction Hash : " + hash + "</br></br>Contract address : </br>" + result.contractAddress;
+											var contract1 = new web3.eth.Contract(contractABI, result.contractAddress)
+											contract1.methods.setDetails(placeName).send({from: fromAddress});
+										}
+									})	
+								}, 3000)
+							} else {
+								console.log(err);
+							}
+						})
+					})
+					
+	            }
+	        }
+	    }
+	};
+	request.send(null);
+}, false);
+
+document.getElementById("guess").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var contractAddress = document.querySelector("#guess #contractAddress").value;
+    var fromAddress = document.querySelector("#guess #fromAddress").value;
+    var privkey = document.querySelector("#guess #privkey").value;
+    var myPhone = document.getElementById('myPhone').value;
+	var myHome = document.getElementById('myHome').value;
+	var visitTime = getDateTime();
+	// web3.eth.defaultAccount = web3.eth.personal.getAccounts()[0]
+	
+	web3.eth.getAccounts(function(err, result){
+		if(!err){
+			console.log(result[0])
+			web3.eth.personal.unlockAccount(result[0], "pass0", 1200);
+		}
+		else{
+			console.log(err)
+		}
+	});
+
+	
+	// from contract
+	var contract = new web3.eth.Contract(contractABI, contractAddress);
+
+	
+	// call fallback
+	var txSuccess = false;
+	document.querySelector("#guess #message").innerHTML = "";
+	document.querySelector("#guess #message3").innerHTML = "";
+	document.querySelector("#guess #message2").innerHTML = "";
+	
+	web3.eth.personal.unlockAccount(fromAddress, privkey, 100);
+
+	contract.methods.visit(myPhone, myHome).send({from: fromAddress})
+	.on('transactionHash', function(hash){
+		document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash + "Mining...";
+	})
+	.on('receipt',function(receipt){
+		console.log(receipt)
+		document.querySelector("#guess #message").innerHTML = "Transaction Hash : <br>" + hash;
+		document.querySelector("#guess #message2").innerHTML = "Gas Used : </br>" + receipt.gasUsed;
+		document.querySelector("#guess #message3").innerHTML = "Attendance Time : "+visitTime;
+	})
+	;
+	
+	
+}, false)
+
+document.getElementById("showVisitor").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var contractAddress = document.querySelector("#showVisitor #contractAddress").value;
+    // var privkey = document.querySelector("#showVisitor #privkey").value;
+
+
+	// from contract
+	var contract = new web3.eth.Contract(contractABI, contractAddress);
+	
+	// call fallback
+	var txSuccess = false;
+	document.querySelector("#showVisitor #message").innerHTML = "";
+	document.querySelector("#showVisitor #message3").innerHTML = "";
+	document.querySelector("#showVisitor #message2").innerHTML = "";
+	// console.log(contract)
+
+	contract.methods.getDetails().call().then(function(result){
+		if(result)
+		{
+			var row = `Open Time : ${unixtoDateTime(result[2])}  | Place Name : ${result[1]}  | Owner Account Address : ${result[0]}  <br/>`
+			document.querySelector("#showVisitor #message").innerHTML += row;
+			console.log(result);
+		}
+	});
+
+
+	contract.methods.visitorCount().call((err, res) => {
+		if(!err){
+			console.log(res);
+			for (var index = 0; index < res; index++) {
+				console.log(index);
+				contract.methods.getVisitors(index).call().then(function(result){
+					if(result)
+					{
+						var row = `Time : ${unixtoDateTime(result[2])}  | Phone : ${result[0]}  | Home : ${result[1]}  <br/>`
+						document.querySelector("#showVisitor #message").innerHTML += row;
+								   
+						console.log(result);
+					}
+					});
+				}
+		} 
+		else{
+			console.log(err);
+		} 
+	})
+
+}, false)

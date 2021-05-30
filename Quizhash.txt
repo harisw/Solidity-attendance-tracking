@@ -1,9 +1,0 @@
-QuizCoin Transaction Hash : 0x695786ff6879b9f9d945c8402bcd02cd06dea1e104df877bfd77e2fa4330fb20
-
-QuizCoin Contract address :
-0xcb7ceee34667e8c7315dbbcd210b4b4f4e776d38
-
-QuizGame Transaction Hash : 0x2f0c9c8ec5b3367dce1ceaf3d9976eac34aa226f67410f5d1c8acb9b8decaaf0
-
-QuizGame Contract address :
-0xa099b44f6413de80dbfa915fa257d109845f922d
