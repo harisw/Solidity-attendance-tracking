@@ -3,9 +3,6 @@ var contractABI = [{"inputs":[],"stateMutability":"nonpayable","type":"construct
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
-
-
-console.log(web3.version.api)
 function getAJAXObject() {
     var request;
     if (window.XMLHttpRequest) {
@@ -209,12 +206,15 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 	contract.methods.getDetails().call().then(function(result){
 		if(result)
 		{
-			var row = `Open Time : ${unixtoDateTime(result[2])}  | Place Name : ${result[1]}  | Owner Account Address : ${result[0]}  <br/>`
-			document.querySelector("#showVisitor #message").innerHTML += row;
+			var row = `Open Time : ${unixtoDateTime(result[2])}  <br/>
+			Place Name : ${result[1]}  <br/>
+			Owner Account Address : ${result[0]}  <br/>`
+			document.querySelector("#contractTitle").innerHTML = row;
 			console.log(result);
 		}
 	});
 
+	$("#visitorsBody")[0].innerHTML = "";
 
 	contract.methods.visitorCount().call((err, res) => {
 		if(!err){
@@ -224,8 +224,14 @@ document.getElementById("showVisitor").addEventListener("submit", function (e) {
 				contract.methods.getVisitors(index).call().then(function(result){
 					if(result)
 					{
-						var row = `Time : ${unixtoDateTime(result[2])}  | Phone : ${result[0]}  | Home : ${result[1]}  <br/>`
-						document.querySelector("#showVisitor #message").innerHTML += row;
+						var row = `<tr>
+									<td scope="row">${index}</td>
+									<td>${unixtoDateTime(result[2])}</td>
+									<td>${result[0]}</td>
+									<td>${result[1]}</td>
+									</tr>`
+						$("#visitorsBody").append(row);
+						// document.querySelector("#showVisitor #message").innerHTML += row;
 								   
 						console.log(result);
 					}
